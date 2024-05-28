@@ -1,7 +1,5 @@
 package com.trevorism.testing;
 
-import java.time.Instant;
-
 public class TestResult {
 
     private String name;

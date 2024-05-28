@@ -46,7 +46,7 @@ public class ReportingTestWatcher implements TestExecutionListener {
         }
         TestEvent event = new TestEvent();
         event.setKind("unit");
-        event.setService(System.getProperty("projectName"));
+        event.setService(projectName);
         event.setDate(new Date());
         event.setNumberOfTests(testResults.size());
         event.setDurationMillis(Instant.now().toEpochMilli() - startInstant.toEpochMilli());
