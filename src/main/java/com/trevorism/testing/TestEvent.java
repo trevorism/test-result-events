@@ -1,6 +1,6 @@
 package com.trevorism.testing;
 
-import java.time.Instant;
+import java.util.Date;
 
 public class TestEvent {
 
@@ -8,7 +8,7 @@ public class TestEvent {
     private boolean success;
     private int numberOfTests;
     private long durationMillis;
-    private Instant date;
+    private Date date;
 
     public String getService() {
         return service;
@@ -42,11 +42,11 @@ public class TestEvent {
         this.durationMillis = durationMillis;
     }
 
-    public Instant getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Instant date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 }
