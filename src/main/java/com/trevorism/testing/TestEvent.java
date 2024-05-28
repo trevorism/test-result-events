@@ -5,6 +5,7 @@ import java.util.Date;
 public class TestEvent {
 
     private String service;
+    private String kind;
     private boolean success;
     private int numberOfTests;
     private long durationMillis;
@@ -48,5 +49,13 @@ public class TestEvent {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public void setKind(String kind) {
+        this.kind = kind;
     }
 }

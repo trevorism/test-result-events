@@ -12,6 +12,9 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.trevorism.http.HttpClient;
+import com.trevorism.http.JsonHttpClient;
+
 public class ReportingTestWatcher implements TestExecutionListener {
 
     private List<TestResult> testResults = new LinkedList<>();
@@ -21,8 +24,7 @@ public class ReportingTestWatcher implements TestExecutionListener {
 
     @Override
     public void testPlanExecutionStarted(TestPlan testPlan) {
-        System.out.println("In test plan execution started");
-        projectName = System.getProperty("projectName");
+        projectName = System.getProperty("trevorism.test.event");
         if(projectName != null && !projectName.isEmpty()) {
             eventEnabled = true;
         }
@@ -31,8 +33,6 @@ public class ReportingTestWatcher implements TestExecutionListener {
 
     @Override
     public void executionFinished(TestIdentifier testIdentifier, TestExecutionResult testExecutionResult) {
-        System.out.println("In execution finished");
-
         TestResult testResult = new TestResult();
         testResult.setName(testIdentifier.getDisplayName());
         testResult.setSuccess(testExecutionResult.getStatus().equals(TestExecutionResult.Status.SUCCESSFUL));
@@ -41,11 +41,11 @@ public class ReportingTestWatcher implements TestExecutionListener {
 
     @Override
     public void testPlanExecutionFinished(TestPlan testPlan) {
-        System.out.println("In test plan execution finished");
-        //if(!eventEnabled){
-        //    return;
-        //}
+        if(!eventEnabled){
+            return;
+        }
         TestEvent event = new TestEvent();
+        event.setKind("unit");
         event.setService(System.getProperty("projectName"));
         event.setDate(new Date());
         event.setNumberOfTests(testResults.size());
@@ -53,7 +53,23 @@ public class ReportingTestWatcher implements TestExecutionListener {
         event.setSuccess(testResults.stream().allMatch(TestResult::isSuccess));
 
         Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").create();
-        System.out.println("EVENT ENABLED: " + eventEnabled + " " + projectName);
-        System.out.println(gson.toJson(event));
+        HttpClient client = new JsonHttpClient();
+        client.post("https://event.data.trevorism.com/event/testResult", gson.toJson(event));
+    }
+
+    public List<TestResult> getTestResults() {
+        return testResults;
+    }
+
+    public boolean isEventEnabled() {
+        return eventEnabled;
+    }
+
+    public Instant getStartInstant() {
+        return startInstant;
+    }
+
+    public String getProjectName() {
+        return projectName;
     }
 }

@@ -26,12 +26,18 @@ apply plugin: "com.trevorism.gradle.release"
 
 repositories {
     mavenCentral()
+    maven {
+        url uri("https://maven.pkg.github.com/trevorism/http-utils")
+        credentials creds
+    }
 }
 
 dependencies {
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'org.junit.jupiter:junit-jupiter-api:5.10.2'
     implementation 'org.junit.platform:junit-platform-launcher:1.10.2'
+    implementation 'com.trevorism:http-utils:2.1.0'
+    testImplementation 'junit:junit:4.13.2'
 }
 
 check.dependsOn "jacocoTestReport"
